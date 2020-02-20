@@ -53,7 +53,7 @@ def fileTypeCheck_Music(torrent_file):
 # thanks to renanbs on GitHub: https://github.com/renanbs/extractor/blob/master/LICENSE
 def multiRarUnzip(torrent_name, torrent_root_path):
     # print(glob.glob(torrent_root_path + "\\**.rar"))
-    logToFile(str(datetime.now()) + " [tvSort] - multiRAR detected, unzipping to destination: " + MOVIE_TV_DESTINATION + "\n")
+    logToFile(str(datetime.now()) + " [multiRarUnzip] - multiRAR detected, unzipping to destination: " + MOVIE_TV_DESTINATION + "\n")
     path_list = glob.glob(torrent_root_path + "\\**.rar")
     for path in path_list:
         path_in_str = str(path)
@@ -135,6 +135,12 @@ def movieSort(torrent_name, torrent_root_path):
         logToFile("[movieSort] - NO ASSOCIATIONS FOR -MOVIE- TORRENT - " + torrent_name + " \n")
 
 def main():
+
+    # TODO make games copy/unzip to z drive
+    # TODO check for existing files during copy
+    # TODO put mp3 check before torrent name check for music only
+    # TODO upgrade music percentage checker to drill recursively through folders
+
     print(str(sys.argv))
     torrent_name = sys.argv[1]
     torrent_root_path = sys.argv[2]
