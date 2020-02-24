@@ -14,15 +14,22 @@ from datetime import datetime
 import PathGenerator as PathGen
 
 ### SETTINGS ###
+PLEX_LIBRARY = "G:\\TV Shows"
 GAME_DESTINATION = "Z:\\"
 MOVIE_TV_DESTINATION = "Z:\\"
 MUSIC_DESTINATION = "C:\\Users\\mihal\\Desktop"
 LOG_DESTINATION = "C:\\Users\\mihal\\Desktop"
 TORRENT_FOLDER = "H:\\Torrent\\Downloaded Torrents"
 MUSIC_CONFIDENCE_REQUIRED_SCORE = 0.65
+SEARCH_DEPTH = 2
 ### SETTINGS ###
 
-# uses QBitTorrent api to control the current torrent
+# https://github.com/python-telegram-bot/python-telegram-bot
+def telegramNotifier():
+    print(1)
+
+
+# uses QBitTorrent api to control the current torrent tags
 def qbitLogin():
     print(1)
     # https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-Documentation#get-torrent-list
@@ -84,6 +91,43 @@ def gameIdentifier(torrent_root_path):
 
     return confirm_number
 
+# obtain TV name without ".", all text before SXXEXX identifier
+def tvNameSplitter(torrent_name_split):
+    tv_name = ''
+    for word in torrent_name_split:
+        S_E_MATCH = S_E_REGEX(word)
+
+        if S_E_MATCH:
+            return tv_name.rstrip()
+
+        tv_name += word + ' '
+
+def tvIdentifier(torrent_name, tv_code):
+    torrent_name_split = torrent_name.split(".")
+    tv_name = tvNameSplitter(torrent_name_split)
+    # print('---' + tv_name + '---')
+    # searches plex library for shows matching that name
+    for (root, dirs, files) in os.walk(PLEX_LIBRARY):
+        if root[len(PLEX_LIBRARY):].count(os.sep) < SEARCH_DEPTH:
+            for dir in dirs:
+                if dir.__contains__(tv_name) or dir == tv_name:
+                    tv_dir = root + '\\' + dir
+                    tv_season_num = int(tv_code[1] + tv_code[2])
+                    tv_episode_num = int(tv_code[4] + tv_code[5])
+                    logToFile(str(datetime.now()) + " [tvIdentifier] TV folder found: " + tv_dir + "\n")
+                    # search for correct season
+                    for (root, dirs, files) in os.walk(tv_dir):
+                        for dir in dirs:
+                            if dir.__contains__(str(tv_season_num)):
+                                final_folder_path = tv_dir + "\\" + dir + "\\"
+                                logToFile(str(datetime.now()) + " [tvIdentifier] season folder found: " + dir + "\n")
+                                logToFile(str(datetime.now()) + " [tvIdentifier] final path is: " + final_folder_path + "\n")
+                                return final_folder_path
+
+                    # if we get here we have not found the tv show
+    logToFile(str(datetime.now()) + " [tvIdentifier] - unable to find PLEX folder for: " + torrent_name + "\n")
+    #
+
 # thanks to renanbs on GitHub: https://github.com/renanbs/extractor/blob/master/LICENSE
 def multiRarUnzip(torrent_name, torrent_root_path):
     # print(glob.glob(torrent_root_path + "\\**.rar"))
@@ -99,13 +143,19 @@ def multiRarUnzip(torrent_name, torrent_root_path):
 
 def copySomething(root_folder, file_to_copy, path_to_copy_to):
     logToFile(str(datetime.now()) + " [copySomething] - copying file: " + file_to_copy + " to destination: " + path_to_copy_to + "\n")
-    print(os.path.exists(path_to_copy_to))
     if not os.path.exists(path_to_copy_to):
         copy(str(root_folder + "\\" + file_to_copy), path_to_copy_to)
         logToFile(str(datetime.now()) + " [copySomething] - COPY COMPLETE \n")
-
     else:
         logToFile(str(datetime.now()) + " [copySomething] - FILE ALREADY EXISTS \n")
+
+def moveSomething(root_folder, file_to_copy, path_to_move_to):
+    logToFile(str(datetime.now()) + " [moveSomething] - moving file: " + file_to_copy + " to destination: " + path_to_move_to + "\n")
+    if not os.path.exists(path_to_move_to):
+        shutil.move(str(root_folder + "\\" + file_to_copy), path_to_move_to)
+        logToFile(str(datetime.now()) + " [moveSomething] - MOVE COMPLETE \n")
+    else:
+        logToFile(str(datetime.now()) + " [moveSomething] - FILE ALREADY EXISTS \n")
 
 def tvSort(torrent_name, torrent_root_path):
     no_association = True
@@ -113,7 +163,7 @@ def tvSort(torrent_name, torrent_root_path):
         for file in files:
             # copies all mkv files in torrent folder
             if fileTypeCheck_TV(file):
-                copySomething(root, file)
+                copySomething(root, file, MOVIE_TV_DESTINATION + "\\" + file)
                 logToFile(file + "***\n")
                 no_association = False
 
@@ -166,6 +216,22 @@ def gameSort(torrent_name, torrent_root_path):
     else:
         logToFile(str(datetime.now()) + " [gameSort] - FILE ALREADY EXISTS \n")
 
+def S_E_REGEX_NAME(torrent_name):
+    S_E_regex = re.compile('S[0-9][0-9]E[0-9][0-9]')
+    S_E_match_name = re.findall(S_E_regex, torrent_name)
+    return S_E_match_name
+
+def S_E_REGEX(torrent_name):
+    # check if TV show single
+    S_E_regex = re.compile('S[0-9][0-9]E[0-9][0-9]')
+    S_E_match = re.search(S_E_regex, torrent_name)
+    return S_E_match
+
+def S_REGEX(torrent_name):
+    # TV show entire season/show
+    S_regex = re.compile('S[0-9][0-9]')
+    S_match = re.search(S_regex, torrent_name)
+
 def main():
     print(str(sys.argv))
     torrent_name = sys.argv[1]
@@ -173,16 +239,13 @@ def main():
     logToFile(str(datetime.now()) + "---------------------------------------------------------------\n")
     logToFile(str(datetime.now()) + " [main] - NEW TORRENT: " + torrent_name + "\n")
 
-    # check if TV show single
-    S_E_regex = re.compile('S[0-9][0-9]E[0-9][0-9]')
-    S_E_match = re.search(S_E_regex, torrent_name)
-
-    # TV show entire season/show
-    S_regex = re.compile('S[0-9][0-9]')
-    S_match =re.search(S_regex, torrent_name)
+    S_E_match = S_E_REGEX(torrent_name)
+    S_E_name = S_E_REGEX_NAME(torrent_name)
+    S_match = S_REGEX(torrent_name)
 
     # if tv show do stuff
     if S_E_match:
+        tv_code = str(S_E_name[0])
         logToFile(str(datetime.now()) + " [main] - TV detected \n")
         if fileTypeCheck_TV(torrent_root_path):
             logToFile(str(datetime.now()) + " [main] - single file detected...copying to drive: " + MOVIE_TV_DESTINATION + "\n")
@@ -192,6 +255,15 @@ def main():
             copySomething(TORRENT_FOLDER, fileName, MOVIE_TV_DESTINATION)
         else:
             tvSort(torrent_name, torrent_root_path)
+
+        # looks through MOVIE_TV_DESTINATION for the file and copies it to the correct folder in plex library
+        PLEX_DESTINATION = tvIdentifier(torrent_name, tv_code)
+        fileName = str(torrent_root_path.rsplit("\\", 1)[1])
+
+        for (root, dirs, files) in os.walk(MOVIE_TV_DESTINATION):
+            for file in files:
+                if re.search(fileName, file, re.IGNORECASE):
+                    moveSomething(MOVIE_TV_DESTINATION, file, PLEX_DESTINATION + "\\" + file)
 
     # not tv show, must be movie
     elif torrentNameCheck_Movie(torrent_name):
