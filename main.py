@@ -1,5 +1,3 @@
-#first commit, nothing here!
-
 import os
 import re
 import sys
