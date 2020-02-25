@@ -25,12 +25,14 @@ SEARCH_DEPTH = 2
 # https://github.com/python-telegram-bot/python-telegram-bot
 def telegramNotifier():
     print(1)
+    #TODO
 
 
 # uses QBitTorrent api to control the current torrent tags
 def qbitLogin():
     print(1)
     # https://github.com/qbittorrent/qBittorrent/wiki/WebUI-API-Documentation#get-torrent-list
+    # TODO
 
 def logToFile(log_text):
     f = open(LOG_DESTINATION + "\\log.txt", "a")
