@@ -67,8 +67,10 @@ def fileTypeCheck_Game(torrent_root_path):
         return True
 
 def fileTypeCheck_Game_Zipped(torrent_root_path):
-    if str(torrent_root_path).__contains__(".rar"):
-        return True
+    for (root, dirs, files) in os.walk(PLEX_LIBRARY):
+        for file in files:
+            if str(file).__contains__(".rar"):
+                return True
 
 def musicIdentifier(torrent_root_path):
     confirm_number = 0
@@ -129,17 +131,17 @@ def tvIdentifier(torrent_name, tv_code):
     #
 
 # thanks to renanbs on GitHub: https://github.com/renanbs/extractor/blob/master/LICENSE
-def multiRarUnzip(torrent_name, torrent_root_path):
+def multiRarUnzip(torrent_name, torrent_root_path, destination):
     # print(glob.glob(torrent_root_path + "\\**.rar"))
-    logToFile(str(datetime.now()) + " [multiRarUnzip] - multiRAR detected, unzipping to destination: " + MOVIE_TV_DESTINATION + "\n")
+    logToFile(str(datetime.now()) + " [multiRarUnzip] - multiRAR detected, unzipping to destination: " + destination + "\n")
     path_list = glob.glob(torrent_root_path + "\\**.rar")
     for path in path_list:
         path_in_str = str(path)
-        out = subprocess.run(["unrar", "e", path_in_str, MOVIE_TV_DESTINATION], stdout=subprocess.DEVNULL)
+        out = subprocess.run(["unrar", "e", path_in_str, destination], stdout=subprocess.DEVNULL)
         if not out.returncode:
-            logToFile(str(datetime.now()) + " " + torrent_name + " - [ OK ] \n")
+            logToFile(str(datetime.now()) + " [multiRarUnzip] - " + torrent_name + " - [ OK ] \n")
         else:
-            logToFile(str(datetime.now()) + " " + torrent_name + " - [ ERROR ]  \n")
+            logToFile(str(datetime.now()) + " [multiRarUnzip] - " + torrent_name + " - [ ERROR ]  \n")
 
 def copySomething(root_folder, file_to_copy, path_to_copy_to):
     logToFile(str(datetime.now()) + " [copySomething] - copying file: " + file_to_copy + " to destination: " + path_to_copy_to + "\n")
@@ -169,7 +171,7 @@ def tvSort(torrent_name, torrent_root_path):
 
             # rar file discovered, begin unzipping
             elif str(file).__contains__(".rar"):
-                multiRarUnzip(torrent_name, torrent_root_path)
+                multiRarUnzip(torrent_name, torrent_root_path, MOVIE_TV_DESTINATION)
                 no_association = False
 
     # check to see if the above logic didnt capture a file
@@ -188,7 +190,7 @@ def movieSort(torrent_name, torrent_root_path):
 
             # rar file discovered, begin unzipping
             elif str(file).__contains__(".rar"):
-                multiRarUnzip(torrent_name, torrent_root_path)
+                multiRarUnzip(torrent_name, torrent_root_path, MOVIE_TV_DESTINATION)
                 no_association = False
 
     # check to see if the above logic didnt capture a file
@@ -207,14 +209,22 @@ def musicSort(torrent_name, torrent_root_path):
 
 # game has been verified by this point
 def gameSort(torrent_name, torrent_root_path):
-    path_to_copy_to = GAME_DESTINATION + "/" + torrent_name
+    path_to_copy_to = GAME_DESTINATION + torrent_name
     if not os.path.exists(path_to_copy_to):
-        logToFile(str(datetime.now()) + " [gameSort] - copying file: " + torrent_name + " to destination: " + GAME_DESTINATION + "\n")
+        logToFile(str(datetime.now()) + " [gameSort] - copying file: " + torrent_name + " to destination: " + path_to_copy_to + "\n")
         shutil.copytree(torrent_root_path, path_to_copy_to)
         logToFile(str(datetime.now()) + " [gameSort] - COPY COMPLETE \n")
-
     else:
         logToFile(str(datetime.now()) + " [gameSort] - FILE ALREADY EXISTS \n")
+
+    if fileTypeCheck_Game_Zipped(path_to_copy_to + "\\"):
+        logToFile(str(datetime.now()) + " [gameSort] - unzipping from " + path_to_copy_to + " to " + path_to_copy_to + " - unzipped\n")
+        multiRarUnzip(torrent_name, path_to_copy_to, path_to_copy_to + " - unzipped\\")
+
+        for (root, dirs, files) in os.walk(path_to_copy_to + "\\"):
+            for file in files:
+                if str(file).__contains__(".nfo"):
+                    copySomething(root, file, path_to_copy_to + " - unzipped\\" + file)
 
 def S_E_REGEX_NAME(torrent_name):
     S_E_regex = re.compile('S[0-9][0-9]E[0-9][0-9]')
@@ -285,6 +295,6 @@ def main():
         gameSort(torrent_name, torrent_root_path)
 
     else:
-        logToFile("***NO ASSOCIATIONS FOR TORRENT - " + torrent_name + "***\n")
+        logToFile("[main] - ***NO ASSOCIATIONS FOR TORRENT - " + torrent_name + "***\n")
 
 main()
