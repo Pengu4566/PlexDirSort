@@ -12,6 +12,8 @@ import PathGenerator as PathGen
 import FileIdentifiers as FileID
 import FileTypeChecks as FileCheck
 
+# TODO copy pdf, epub, mobi files to desktop, scan for just files and folders full of files
+
 
 def logToFile(log_text):
     f = open(settings.LOG_DESTINATION + "\\log.txt", "a")
@@ -84,8 +86,6 @@ def gameSort(torrent_name, torrent_root_path):
             for file in files:
                 if str(file).__contains__(".nfo"):
                     OSU.copySomething(root, file, path_to_copy_to + " - unzipped\\" + file)
-
-
 
 def main():
     print(str(sys.argv))
