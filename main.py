@@ -132,7 +132,7 @@ def main():
             movieSort(torrent_name, torrent_root_path)
 
     # might be music too, must check torrent name and have more than 65% music files inside
-    elif FileCheck.torrentNameCheck_Music(torrent_name) or FileID.musicIdentifier(torrent_root_path):
+    elif FileID.musicIdentifier(torrent_root_path) or FileCheck.torrentNameCheck_Music(torrent_name):
         logToFile(str(datetime.now()) + " [main] - MUSIC detected \n")
         musicSort(torrent_name, torrent_root_path)
 
