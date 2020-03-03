@@ -20,7 +20,7 @@ def fileTypeCheck_TV(torrent_root_path):
 
 # checks torrent file extension (from path derived filename)
 def fileTypeCheck_Music(torrent_file):
-    if str(torrent_file).__contains__(".mp3") | str(torrent_file).__contains__(".flac") | str(torrent_file).__contains__(".FLAC") | str(torrent_file).__contains__(".wav") | str(torrent_file).__contains__(".WAV") | str(torrent_file).__contains__(".m4b"):
+    if str(torrent_file).__contains__(".mp3") | str(torrent_file).__contains__(".flac") | str(torrent_file).__contains__(".FLAC") | str(torrent_file).__contains__(".wav") | str(torrent_file).__contains__(".WAV") | str(torrent_file).__contains__(".m4b") | str(torrent_file).__contains__(".log") | str(torrent_file).__contains__(".cue"):
         return True
 
 def fileTypeCheck_Game(torrent_root_path):
