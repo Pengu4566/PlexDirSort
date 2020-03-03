@@ -51,14 +51,15 @@ def tvIdentifier(torrent_name, tv_code):
         if root[len(settings.PLEX_LIBRARY):].count(os.sep) < settings.SEARCH_DEPTH:
             for dir in dirs:
                 if dir.__contains__(tv_name) or dir == tv_name:
-                    tv_dir = root + '\\' + dir
+                    tv_dir = root + '\\' + dir + "\\"
                     tv_season_num = int(tv_code[1] + tv_code[2])
                     # tv_episode_num = int(tv_code[4] + tv_code[5])
                     logToFile(str(datetime.now()) + " [tvIdentifier] TV folder found: " + tv_dir + "\n")
                     # search for correct season
+                    print(tv_dir)
                     for (root2, dirs2, files2) in os.walk(tv_dir):
                         for dir2 in dirs2:
-                            if dir.__contains__(str(tv_season_num)):
+                            if dir2.__contains__(str(tv_season_num)):
                                 final_folder_path = tv_dir + "\\" + dir2 + "\\"
                                 logToFile(str(datetime.now()) + " [tvIdentifier] season folder found: " + dir2 + "\n")
                                 logToFile(str(datetime.now()) + " [tvIdentifier] final path is: " + final_folder_path + "\n")
