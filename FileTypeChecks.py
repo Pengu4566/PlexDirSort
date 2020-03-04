@@ -6,7 +6,7 @@ def torrentNameCheck_Movie(torrent_name):
         return True
 
 def torrentNameCheck_Music(torrent_name):
-    if torrent_name.__contains__("FLAC") | torrent_name.__contains__("320") | torrent_name.__contains__("v0") | torrent_name.__contains__("v2") | torrent_name.__contains__("WAV"):
+    if torrent_name.__contains__("FLAC") | torrent_name.__contains__("320") | torrent_name.__contains__("v0") | torrent_name.__contains__("v2") | torrent_name.__contains__("WAV") | torrent_name.__contains__("WEB"):
         return True
 
 # checks torrent file extension (from path)

@@ -9,5 +9,5 @@ LOG_DESTINATION = "C:\\Users\\mihal\\Desktop"
 MUSIC_DESTINATION = "C:\\Users\\mihal\\Desktop"
 TORRENT_FOLDER = "H:\\Torrent\\Downloaded Torrents"
 
-MUSIC_CONFIDENCE_REQUIRED_SCORE = 0.55
+MUSIC_CONFIDENCE_REQUIRED_SCORE = 0.40
 ### SETTINGS ###
