@@ -54,14 +54,14 @@ def tvIdentifier(torrent_name, tv_code):
                     tv_dir = root + '\\' + dir + "\\"
                     tv_season_num = int(tv_code[1] + tv_code[2])
                     # tv_episode_num = int(tv_code[4] + tv_code[5])
-                    logToFile(str(datetime.now()) + " [tvIdentifier] TV folder found: " + tv_dir + "\n")
+                    # logToFile(str(datetime.now()) + " [tvIdentifier] TV folder found: " + tv_dir + "\n")
                     # search for correct season
                     print(tv_dir)
                     for (root2, dirs2, files2) in os.walk(tv_dir):
                         for dir2 in dirs2:
                             if dir2.__contains__(str(tv_season_num)):
                                 final_folder_path = tv_dir + "\\" + dir2 + "\\"
-                                logToFile(str(datetime.now()) + " [tvIdentifier] season folder found: " + dir2 + "\n")
+                                # logToFile(str(datetime.now()) + " [tvIdentifier] season folder found: " + dir2 + "\n")
                                 logToFile(str(datetime.now()) + " [tvIdentifier] final path is: " + final_folder_path + "\n")
                                 return final_folder_path
 
