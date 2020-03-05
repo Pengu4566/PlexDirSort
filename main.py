@@ -45,14 +45,15 @@ def movieSort(torrent_name, torrent_root_path):
         for file in files:
             # copies all mkv files in torrent folder except small SAMPLE clips
             generatedMoviePath = PathGen.moviePathGen(file)
-            logToFile(str(datetime.now()) + " [movieSort] - generated movie path is: " + generatedMoviePath + "\n")
 
             if FileCheck.fileTypeCheck_Movie(file):
+                logToFile(str(datetime.now()) + " [movieSort] - generated movie path is: " + generatedMoviePath + "\n")
                 OSU.copySomething(root, file, generatedMoviePath + "\\" + file)
                 no_association = False
 
             # rar file discovered, begin unzipping
             elif str(file).__contains__(".rar"):
+                logToFile(str(datetime.now()) + " [movieSort] - generated movie path is: " + generatedMoviePath + "\n")
                 OSU.multiRarUnzip(torrent_name, torrent_root_path, settings.MOVIE_TV_DESTINATION)
                 for (rootMOV, dirsMOV, filesMOV) in os.walk(settings.MOVIE_TV_DESTINATION + "\\"):
                     for fileMOV in filesMOV:
