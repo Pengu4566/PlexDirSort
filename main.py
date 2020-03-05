@@ -48,7 +48,6 @@ def movieSort(torrent_name, torrent_root_path):
             logToFile(str(datetime.now()) + " [movieSort] - generated movie path is: " + generatedMoviePath + "\n")
 
             if FileCheck.fileTypeCheck_Movie(file):
-                logToFile(str(datetime.now()) + " [movieSort] - no rar detected, copying to generated path \n")
                 OSU.copySomething(root, file, generatedMoviePath + "\\" + file)
                 no_association = False
 
