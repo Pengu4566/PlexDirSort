@@ -1,19 +1,22 @@
 # https://github.com/python-telegram-bot/python-telegram-bot
 
 import telegram
-import logging
-from telegram.ext import Updater
 
-BOT_TOKEN = '1106057306:AAHzghsz0JEjov3imNpRzSaG-Z9kmWPqkQE'
-bot = telegram.Bot(token=BOT_TOKEN)
+LOG_BOT_TOKEN = '1106057306:AAHzghsz0JEjov3imNpRzSaG-Z9kmWPqkQE'
+PLEX_USER_BOT_TOKEN = '825574210:AAEjzinreCgYeBLhzcwrl9NTlplVJnpbiA8'
+
+logBot = telegram.Bot(token=LOG_BOT_TOKEN)
+plexUserBot = telegram.Bot(token=PLEX_USER_BOT_TOKEN)
 
 LOGGING_CHAT = '390255012'
-PLEX_USER_CHAT =''
+PLEX_USER_CHAT ='-1001300160590'
 
 def logToTelegram(text):
-    bot.send_message(chat_id=LOGGING_CHAT, text=text)
+    logBot.send_message(chat_id=LOGGING_CHAT, text=text)
 
 def notifyPlexUsers(torrent_name, mediaFormat):
-    bot.send_message(chat_id=PLEX_USER_CHAT, text="***New " + mediaFormat + " added: " + torrent_name)
-
+    try:
+        plexUserBot.send_message(chat_id=PLEX_USER_CHAT, text="New " + mediaFormat + " added: \n'" + torrent_name + "'")
+    except telegram.error.TimedOut as e:
+        logBot.send_message(chat_id=LOGGING_CHAT, text="ERROR SENDING TO PLEX USERS: \n'" + e + "'")
 

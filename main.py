@@ -149,8 +149,10 @@ def main():
         TelegramInterface.logToTelegram("[main] - MUSIC detected \n")
         musicSort(torrent_name, torrent_root_path)
 
+
     elif FileID.gameIdentifier(torrent_root_path):
         gameSort(torrent_name, torrent_root_path)
+
 
     else:
         TelegramInterface.logToTelegram("[main] - ***NO ASSOCIATIONS FOR TORRENT - " + torrent_name + "***\n")
