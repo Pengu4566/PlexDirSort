@@ -7,8 +7,8 @@ PLEX_USER_BOT_TOKEN = secrets.PLEX_USER_BOT_TOKEN
 logBot = telegram.Bot(token=LOG_BOT_TOKEN)
 plexUserBot = telegram.Bot(token=PLEX_USER_BOT_TOKEN)
 
-LOGGING_CHAT = '390255012'
-PLEX_USER_CHAT ='-1001300160590'
+LOGGING_CHAT = secrets.LOGGING_CHAT
+PLEX_USER_CHAT = secrets.PLEX_USER_CHAT
 
 def logToTelegram(text):
     logBot.send_message(chat_id=LOGGING_CHAT, text=text)
