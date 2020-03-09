@@ -1,9 +1,10 @@
 import qbittorrentapi
+import secrets
 
 WEBSERVER_IP = '108.254.124.93'
 WEBSERVER_PORT = '8080'
 WEBSERVER_USERNAME = 'Pengu4566'
-WEBSERVER_PASSWORD = ''
+WEBSERVER_PASSWORD = secrets.WEBSERVER_PASSWORD
 
 # uses QBitTorrent api to control the current torrent tags
 def qbitLogin():

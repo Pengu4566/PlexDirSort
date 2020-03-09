@@ -1,9 +1,8 @@
-# https://github.com/python-telegram-bot/python-telegram-bot
-
+import secrets
 import telegram
 
-LOG_BOT_TOKEN = '1106057306:AAHzghsz0JEjov3imNpRzSaG-Z9kmWPqkQE'
-PLEX_USER_BOT_TOKEN = '825574210:AAEjzinreCgYeBLhzcwrl9NTlplVJnpbiA8'
+LOG_BOT_TOKEN = secrets.LOG_BOT_TOKEN
+PLEX_USER_BOT_TOKEN = secrets.PLEX_USER_BOT_TOKEN
 
 logBot = telegram.Bot(token=LOG_BOT_TOKEN)
 plexUserBot = telegram.Bot(token=PLEX_USER_BOT_TOKEN)
