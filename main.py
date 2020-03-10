@@ -124,12 +124,16 @@ def main():
         PLEX_DESTINATION = FileID.tvIdentifier(torrent_name, tv_code)
         fileName = str(torrent_root_path.rsplit("\\", 1)[1])
 
+        print(fileName)
+
         for (root, dirs, files) in os.walk(settings.MOVIE_TV_DESTINATION):
             for file in files:
-                if re.search(fileName, file, re.IGNORECASE):
+                if file.__contains__(fileName):
+                #if re.search(fileName, file, re.IGNORECASE):
                     OSU.moveSomething(settings.MOVIE_TV_DESTINATION, file, PLEX_DESTINATION + "\\" + file)
-
-        TelegramInterface.notifyPlexUsers(torrent_name, "tv show")
+                    TelegramInterface.notifyPlexUsers(torrent_name, "tv show")
+                else:
+                    print(file)
 
     # not tv show, must be movie
     elif FileCheck.torrentNameCheck_Movie(torrent_name):
