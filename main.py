@@ -12,6 +12,7 @@ import RegexOps as RegOps
 import PathGenerator as PathGen
 import FileIdentifiers as FileID
 import FileTypeChecks as FileCheck
+import QbitTorrentInterface as Qbit
 
 # logging date format for text
 # datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -100,6 +101,9 @@ def main():
     print(str(sys.argv))
     torrent_name = sys.argv[1]
     torrent_root_path = sys.argv[2]
+    torrent_tracker = sys.argv[3]
+    torrent_hash = sys.argv[4]
+
     TelegramInterface.logToTelegram("-------------------------------------------------------------------------------\n")
     TelegramInterface.logToTelegram("[main] - NEW TORRENT: " + torrent_name + "\n")
 
@@ -132,6 +136,7 @@ def main():
                 #if re.search(fileName, file, re.IGNORECASE):
                     OSU.moveSomething(settings.MOVIE_TV_DESTINATION, file, PLEX_DESTINATION + "\\" + file)
                     TelegramInterface.notifyPlexUsers(torrent_name, "tv show")
+                    Qbit.qbitCategorizer(torrent_name, torrent_tracker, torrent_hash)
                 else:
                     print(file)
 
@@ -147,17 +152,15 @@ def main():
             movieSort(torrent_name, torrent_root_path)
 
         TelegramInterface.notifyPlexUsers(torrent_name, "movie")
+        Qbit.qbitCategorizer(torrent_name, torrent_tracker, torrent_hash)
 
     # might be music too, must check torrent name and have more than 65% music files inside
     elif FileID.musicIdentifier(torrent_root_path) or FileCheck.torrentNameCheck_Music(torrent_name):
         TelegramInterface.logToTelegram("[main] - MUSIC detected \n")
         musicSort(torrent_name, torrent_root_path)
-
-
+        Qbit.qbitCategorizer(torrent_name, torrent_tracker, torrent_hash)
     elif FileID.gameIdentifier(torrent_root_path):
         gameSort(torrent_name, torrent_root_path)
-
-
     else:
         TelegramInterface.logToTelegram("[main] - ***NO ASSOCIATIONS FOR TORRENT - " + torrent_name + "***\n")
 
