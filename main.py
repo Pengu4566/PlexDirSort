@@ -29,7 +29,6 @@ def tvSort(torrent_name, torrent_root_path):
             # copies all mkv files in torrent folder
             if FileCheck.fileTypeCheck_TV(file):
                 OSU.copySomething(root, file, settings.MOVIE_TV_DESTINATION + "\\" + file)
-                logToFile(file + "***\n")
                 no_association = False
 
             # rar file discovered, begin unzipping
@@ -161,6 +160,7 @@ def main():
         Qbit.qbitCategorizer(torrent_name, torrent_tracker, torrent_hash)
     elif FileID.gameIdentifier(torrent_root_path):
         gameSort(torrent_name, torrent_root_path)
+        Qbit.qbitCategorizer(torrent_name, torrent_tracker, torrent_hash)
     else:
         TelegramInterface.logToTelegram("[main] - ***NO ASSOCIATIONS FOR TORRENT - " + torrent_name + "***\n")
 
