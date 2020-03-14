@@ -22,7 +22,7 @@ def qbitCategorizer(torrent_name, torrent_tracker, torrent_hash):
     qbt_client = qbittorrentapi.Client(host=WEBSERVER_IP + ":" + WEBSERVER_PORT, username=WEBSERVER_USERNAME, password=WEBSERVER_PASSWORD, VERIFY_WEBUI_CERTIFICATE=False)
     try:
         qbt_client.auth_log_in()
-        TelegramInterface.logToTelegram("[QbitTorrentInterface] - Qbit login SUCCESS \n")
+        # TelegramInterface.logToTelegram("[QbitTorrentInterface] - Qbit login SUCCESS \n")
     except qbittorrentapi.LoginFailed as e:
         TelegramInterface.logToTelegram("[QbitTorrentInterface] - Qbit login FAILED \n")
         print(e)
