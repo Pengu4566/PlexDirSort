@@ -15,3 +15,10 @@ def S_REGEX(torrent_name):
     # TV show entire season/show
     S_regex = re.compile('S[0-9][0-9]')
     S_match = re.search(S_regex, torrent_name)
+    return S_match
+
+def E_REGEX(torrent_name):
+    # TV show episode
+    E_regex = re.compile('E[0-9][0-9]')
+    E_match = re.search(E_regex, torrent_name)
+    return E_match
