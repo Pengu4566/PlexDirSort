@@ -157,7 +157,7 @@ def main():
             else:
                 movieSort(torrent_name, torrent_root_path)
 
-            #TelegramInterface.notifyPlexUsers(torrent_name, "movie")
+            TelegramInterface.notifyPlexUsers(torrent_name, "movie")
             Qbit.qbitCategorizer(torrent_name, torrent_tracker, torrent_hash)
         else:
             TelegramInterface.logToTelegram("[main] - season detected...sort it yourself!")
