@@ -59,7 +59,7 @@ def movieSort(torrent_name, torrent_root_path):
                 for (rootMOV, dirsMOV, filesMOV) in os.walk(settings.MOVIE_TV_DESTINATION + "\\"):
                     for fileMOV in filesMOV:
                         if FileCheck.fileTypeCheck_Movie(fileMOV):
-                            print(settings.MOVIE_TV_DESTINATION + "\\" + fileMOV)
+                            print("PATH: " + settings.MOVIE_TV_DESTINATION + "\\" + fileMOV)
                             OSU.moveSomething(settings.MOVIE_TV_DESTINATION, fileMOV, generatedMoviePath + "\\" + fileMOV)
                 no_association = False
 
@@ -104,6 +104,7 @@ def main():
     torrent_hash = sys.argv[4]
 
     TelegramInterface.logToTelegram("-------------------------------------------------------------------------------\n")
+    TelegramInterface.logToTelegram("SYSARGS ---- " + str(sys.argv))
     TelegramInterface.logToTelegram("[main] - NEW TORRENT: " + torrent_name + "\n")
 
     S_E_match = RegOps.S_E_REGEX(torrent_name)
@@ -111,8 +112,8 @@ def main():
     S_Match = RegOps.S_REGEX(torrent_name)
     E_Match = RegOps.E_REGEX(torrent_name)
 
-    print(S_Match)
-    print(E_Match)
+    #print(S_Match)
+    #print(E_Match)
 
     # if tv show do stuff
     if S_E_match:
@@ -153,7 +154,13 @@ def main():
                 fileName = str(torrent_root_path.rsplit("\\", 1)[1])
                 generatedMoviePath = PathGen.moviePathGen(fileName)
                 TelegramInterface.logToTelegram("[main] - single file detected... copying to path: " + generatedMoviePath + "\n")
-                OSU.copySomething(settings.TORRENT_FOLDER, fileName, generatedMoviePath + "\\" + fileName)
+
+                # if single file in its own folder
+                if os.path.isdir(settings.TORRENT_FOLDER + "\\" + torrent_name):
+                    OSU.copySomething(settings.TORRENT_FOLDER, torrent_name + "\\" + fileName, generatedMoviePath + "\\" + fileName)
+                # if single file in torrent root dir
+                else:
+                    OSU.copySomething(settings.TORRENT_FOLDER, fileName, generatedMoviePath + "\\" + fileName)
             else:
                 movieSort(torrent_name, torrent_root_path)
 
