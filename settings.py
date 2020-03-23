@@ -10,4 +10,5 @@ MUSIC_DESTINATION = "C:\\Users\\mihal\\Desktop"
 TORRENT_FOLDER = "H:\\Torrent\\Downloaded Torrents"
 
 MUSIC_CONFIDENCE_REQUIRED_SCORE = 0.40
+TV_SEASON_NUM_FILES_REQUIRED = 3
 ### SETTINGS ###

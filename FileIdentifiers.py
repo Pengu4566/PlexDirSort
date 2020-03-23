@@ -29,8 +29,17 @@ def gameIdentifier(torrent_root_path):
                 confirm_number = 1
                 if FileCheck.fileTypeCheck_Game_Zipped(file):
                     return 2
-
     return confirm_number
+
+def tvSeasonIdentifier(torrent_root_path):
+    confirm_number = 0
+    for (root, dirs, files) in os.walk(torrent_root_path):
+        for file in files:
+            if FileCheck.fileTypeCheck_Movie(file):
+                confirm_number += 1
+                print(confirm_number)
+                if confirm_number > settings.TV_SEASON_NUM_FILES_REQUIRED:
+                    return True
 
 # obtain TV name without ".", all text before SXXEXX identifier
 def tvNameSplitter(torrent_name_split):
