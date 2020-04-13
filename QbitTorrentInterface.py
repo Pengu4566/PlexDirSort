@@ -14,6 +14,8 @@ IPT_TRACKER_IPT = secrets.IPT_TRACKER_IPT
 MYANON_TRACKER = secrets.MYANON_TRACKER
 ORPHEUS_TRACKER = secrets.ORPHEUS_TRACKER
 REDACTED_TRACKER = secrets.REDACTED_TRACKER
+TORRENTECH_TRACKER = secrets.TORRENTECH_TRACKER
+THEPOLISH_TRACKER = secrets.THEPOLISH_TRACKER
 
 # uses QBitTorrent api to control the current torrent tags
 def qbitCategorizer(torrent_name, torrent_tracker, torrent_hash):
@@ -48,6 +50,12 @@ def qbitCategorizer(torrent_name, torrent_tracker, torrent_hash):
     elif torrent_tracker.__contains__(REDACTED_TRACKER):
         torrent.set_category(category='REDacted')
         TelegramInterface.logToTelegram("[QbitTorrentInterface] - categorized to: REDacted \n")
+    elif torrent_tracker.__contains__(TORRENTECH_TRACKER):
+        torrent.set_category(category='TorrenTech')
+        TelegramInterface.logToTelegram("[QbitTorrentInterface] - categorized to: TorrenTech \n")
+    elif torrent_tracker.__contains__(THEPOLISH_TRACKER):
+        torrent.set_category(category='ThePolishTracker')
+        TelegramInterface.logToTelegram("[QbitTorrentInterface] - categorized to: ThePolishTracker \n")
     else:
         TelegramInterface.logToTelegram("[QbitTorrentInterface] - could not determine categry! \n")
 

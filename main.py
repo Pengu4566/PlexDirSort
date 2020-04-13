@@ -145,10 +145,9 @@ def main():
                 else:
                     print(file)
 
-#
     # not tv show, must be movie...make sure though by looking for S## without E## next to it, and by checking for lots of files
-    elif FileCheck.torrentNameCheck_Movie(torrent_name) or not(S_Match and not E_Match):
-        if not FileID.tvSeasonIdentifier(torrent_root_path):
+    elif FileCheck.torrentNameCheck_Movie(torrent_name):
+        if not FileID.tvSeasonIdentifier(torrent_root_path) or not(S_Match and not E_Match):
             TelegramInterface.logToTelegram("[main] - MOVIE detected \n")
             if FileCheck.fileTypeCheck_Movie(torrent_root_path):
                 fileName = str(torrent_root_path.rsplit("\\", 1)[1])
@@ -174,6 +173,8 @@ def main():
         TelegramInterface.logToTelegram("[main] - MUSIC detected \n")
         musicSort(torrent_name, torrent_root_path)
         Qbit.qbitCategorizer(torrent_name, torrent_tracker, torrent_hash)
+
+    # finally, might be a game
     elif FileID.gameIdentifier(torrent_root_path):
         gameSort(torrent_name, torrent_root_path)
         Qbit.qbitCategorizer(torrent_name, torrent_tracker, torrent_hash)
