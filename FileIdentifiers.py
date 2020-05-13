@@ -46,27 +46,30 @@ def tvNameSplitter(torrent_name_split):
     tv_name = ''
     for word in torrent_name_split:
         S_E_MATCH = RegOps.S_E_REGEX(word)
+        S_E_MATCH_lower = RegOps.S_E_REGEX_lower(word)
 
         if S_E_MATCH:
+            return tv_name.rstrip()
+        elif S_E_MATCH_lower:
             return tv_name.rstrip()
 
         tv_name += word + ' '
 
 def tvIdentifier(torrent_name, tv_code):
     torrent_name_split = torrent_name.split(".")
-    tv_name = tvNameSplitter(torrent_name_split)
+    tv_name = tvNameSplitter(torrent_name_split).lower()
     # print('---' + tv_name + '---')
     # searches plex library for shows matching that name
     for (root, dirs, files) in os.walk(settings.PLEX_LIBRARY):
         if root[len(settings.PLEX_LIBRARY):].count(os.sep) < settings.SEARCH_DEPTH:
             for dir in dirs:
-                if dir.__contains__(tv_name) or dir == tv_name:
+                if dir.lower().__contains__(tv_name) or dir.lower() == tv_name:
                     tv_dir = root + '\\' + dir + "\\"
                     tv_season_num = int(tv_code[1] + tv_code[2])
                     # tv_episode_num = int(tv_code[4] + tv_code[5])
                     # TelegramInterface.logToTelegram("[tvIdentifier] TV folder found: " + tv_dir + "\n")
                     # search for correct season
-                    print(tv_dir)
+                    print("-----" + tv_dir + "-----")
                     for (root2, dirs2, files2) in os.walk(tv_dir):
                         for dir2 in dirs2:
                             if dir2.__contains__(str(tv_season_num)):

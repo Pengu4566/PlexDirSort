@@ -66,6 +66,7 @@ def movieSort(torrent_name, torrent_root_path):
     # check to see if the above logic didnt capture a file
     if no_association:
         TelegramInterface.logToTelegram("[movieSort] - NO ASSOCIATIONS FOR -MOVIE- TORRENT - " + torrent_name + " \n")
+        return False
 
 # music has been verified by this point, just perform the copy
 def musicSort(torrent_name, torrent_root_path):
@@ -108,7 +109,10 @@ def main():
     TelegramInterface.logToTelegram("[main] - NEW TORRENT: " + torrent_name + "\n")
 
     S_E_match = RegOps.S_E_REGEX(torrent_name)
+    S_E_match_lower = RegOps.S_E_REGEX_lower(torrent_name)
     S_E_name = RegOps.S_E_REGEX_NAME(torrent_name)
+    S_E_name_lower = RegOps.S_E_REGEX_NAME_lower(torrent_name)
+
     S_Match = RegOps.S_REGEX(torrent_name)
     E_Match = RegOps.E_REGEX(torrent_name)
 
@@ -116,8 +120,12 @@ def main():
     #print(E_Match)
 
     # if tv show do stuff
-    if S_E_match:
-        tv_code = str(S_E_name[0])
+    if S_E_match or S_E_match_lower:
+        if S_E_match_lower:
+            tv_code = str(S_E_name_lower[0])
+        else:
+            tv_code = str(S_E_name[0])
+
         TelegramInterface.logToTelegram("[main] - TV detected \n")
 
         if FileCheck.fileTypeCheck_TV(torrent_root_path):

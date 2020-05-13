@@ -15,7 +15,7 @@ def logToTelegram(text):
 
 def notifyPlexUsers(torrent_name, mediaFormat):
     try:
-        plexUserBot.send_message(chat_id=PLEX_USER_CHAT, text="New " + mediaFormat + " added: \n'" + torrent_name + "'")
+        plexUserBot.send_message(chat_id=PLEX_USER_CHAT, text="New " + mediaFormat + " added to PERFORMANCE server: \n'" + torrent_name + "'")
     except telegram.error.TimedOut as e:
         logBot.send_message(chat_id=LOGGING_CHAT, text="ERROR SENDING TO PLEX USERS: \n'" + e + "'")
 
