@@ -2,7 +2,7 @@ import os
 
 # checks torrent name (from qbittorrent) for attributes
 def torrentNameCheck_Movie(torrent_name):
-    if torrent_name.__contains__("x264") | torrent_name.__contains__("1080p") | torrent_name.__contains__("720p") | torrent_name.__contains__("XVID") | torrent_name.__contains__("hevc") | torrent_name.__contains__("HEVC") | torrent_name.__contains__("BlueRay") | torrent_name.__contains__("BLURAY") | torrent_name.__contains__("bluray"):
+    if torrent_name.__contains__("x264") | torrent_name.__contains__("1080p") | torrent_name.__contains__("720p") | torrent_name.__contains__("XVID") | torrent_name.__contains__("hevc") | torrent_name.__contains__("HEVC") | torrent_name.__contains__("AC3") | torrent_name.__contains__("XviD") | torrent_name.__contains__("DVDRip"):
         return True
 
 def torrentNameCheck_Music(torrent_name):
