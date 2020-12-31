@@ -150,8 +150,8 @@ def main():
                     OSU.moveSomething(settings.MOVIE_TV_DESTINATION, file, PLEX_DESTINATION + "\\" + file)
                     TelegramInterface.notifyPlexUsers(torrent_name, "tv show")
                     Qbit.qbitCategorizer(torrent_name, torrent_tracker, torrent_hash)
-                else:
-                    print(file)
+                #else:
+                #    print(file)
 
     # not tv show, must be movie...make sure though by looking for S## without E## next to it, and by checking for lots of files
     elif FileCheck.torrentNameCheck_Movie(torrent_name):
